@@ -375,9 +375,14 @@ public class YahooFinance {
         return stocks;
     }
     
-    private static Map<String, Stock> fetchHistoricalQuotes(Map<String, Stock> stocks, Calendar from, Calendar to, Interval interval) throws IOException {
+    private static Map<String, Stock> fetchHistoricalQuotes(Map<String, Stock> stocks, Calendar from, Calendar to, Interval interval) {
         for(Stock s : stocks.values()) {
-            s.getHistory(from, to, interval);
+        	try {
+				s.getHistory(from, to, interval);
+			} catch (IOException e) {
+				logger.warning(s.getName() + " skipped");
+				e.printStackTrace();
+			}
         }
         return stocks;
     }
